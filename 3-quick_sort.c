@@ -1,93 +1,87 @@
 #include "sort.h"
 
+/**
+ * swap - Swaps
+ * @a: first integer
+ * @b: second integer
+ */
+void swap(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 
 /**
- * array_swap - swap two values in array
- * @first: first value
- * @second: second value
+ * quick_sort - Sorts an array of integers
+ * @array: Array
+ * @size: Size
  */
 
 
-void array_swap(int *first, int *second)
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size < 2)
+		return;
+
+	Reccursive_sort(array, 0, size - 1, size);
+}
+
+
+/**
+ * Reccursive_sort - Recursively sorts
+ * @array: Array
+ * @last: Start idx
+ * @first: End idx
+ * @size: Size
+ */
+
+
+void Reccursive_sort(int *array, int last, int first, size_t size)
 {
 	int buck;
 
-	buck = *first;
-	*first = *second;
-	*second = buck;
+	if (last < first)
+	{
+		buck = part(array, last, first, size);
+		Reccursive_sort(array, last, buck - 1, size);
+		Reccursive_sort(array, buck + 1, first, size);
+	}
 }
 
-
 /**
- * part - partition for sorting
- * @array: array
- * @last: tail index
- * @first: head index
- * @size: array size
- * Return: partition index
+ * part - Partitions
+ * @array: Array
+ * @last: Start idx
+ * @first: End idx
+ * @size: Size
+ * Return: The buck index
  */
-
-
-
-int part(int array[], int last, int first, size_t size)
+int part(int *array, int last, int first, size_t size)
 {
-	int a, b, check = 0;
+	int a, b;
+	int buck = array[first];
 
 	a = last - 1;
-
-	for (b = last; b <= first - 1; b++)
+	for (b = last; b < first; b++)
 	{
-		if (array[b] < array[first])
+		if (array[b] < buck)
 		{
-			check = 1;
 			a++;
-			array_swap(&array[b], &array[a]);
+			if (a != b)
+			{
+				swap(&array[a], &array[b]);
+				print_array(array, size);
+			}
 		}
 	}
-	if (check == 1)
+	if (a + 1 != first)
 	{
-		print_array(array, size);
-	}
-	array_swap(&array[a + 1], &array[first]);
-
-	if (check == 0)
-	{
+		swap(&array[a + 1], &array[first]);
 		print_array(array, size);
 	}
 	return (a + 1);
-}
-
-
-/**
- * sorthandle - quick sort reccursif
- * @array: array
- * @last: tail index
- * @first: head index
- * @size: size
- */
-
-
-
-void sorthandle(int *array, int last, int first, size_t size)
-{
-	int tmp;
-
-	if (last < first)
-	{
-		tmp = part(array, last, first, size);
-		sorthandle(array, last, tmp - 1, size);
-		sorthandle(array, tmp + 1, first, size);
-	}
-}
-
-
-/**
- * quick_sort - calls sorthandle
- * @array: array
- * @size: Array size
- */
-void quick_sort(int *array, size_t size)
-{
-	sorthandle(array, 0, size - 1, size);
-	print_array(array, size);
 }
