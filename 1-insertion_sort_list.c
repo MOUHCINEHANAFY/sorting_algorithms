@@ -1,34 +1,34 @@
 #include "sort.h"
 
 /**
- * swap_nodes - Swap two nodes in a doubly linked list
- * @list: Pointer to the head of the list
- * @a: First node to swap
- * @b: Second node to swap
+ * swap - swaps
+ * @list: pointer to db
+ * @a: first node ptr
+ * @b: second node ptr
  */
-void swap_nodes(listint_t **list, listint_t *a, listint_t *b)
+void swap(listint_t **list, listint_t *a, listint_t *b)
 {
-	if (a == NULL || b == NULL || a == b)
-		return;
+	listint_t *nextb = b->next;
+	listint_t *preva = a->prev;
 
-	listint_t *aprev = a->prev;
-	listint_t *bnext = b->next;
 
-	if (aprev)
-		aprev->next = b;
-	else
-		*list = b;
-
-	if (bnext)
-		bnext->prev = a;
-
+	if (preva)
+	{
+		preva->next = b;
+	}
+	if (nextb)
+	{
+		nextb->prev = a;
+	}
 	a->prev = b;
+	b->prev = preva;
+	a->next = nextb;
 	b->next = a;
-
-	a->next = bnext;
-	b->prev = aprev;
+	if (b->prev == NULL)
+	{
+		*list = b;
+	}
 }
-
 /**
  * insertion_sort_list - sorts sort db linked list
  * @list: DB list pointer
@@ -53,7 +53,7 @@ void insertion_sort_list(listint_t **list)
 		{
 			if (buck->n > current->n)
 			{
-				swap_nodes(list, buck, current);
+				swap(list, buck, current);
 				print_list(*list);
 			}
 			buck = buck->prev;
