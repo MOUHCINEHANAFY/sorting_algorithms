@@ -1,93 +1,75 @@
 #include "sort.h"
 
-
 /**
- * array_swap - swap two values in array
- * @first: first value
- * @second: second value
+ * swap - swap two values in array
+ * @a: first value
+ * @b: second value
  */
-
-
-void array_swap(int *first, int *second)
+void swap(int *a, int *b)
 {
-	int buck;
+	int temp;
 
-	buck = *first;
-	*first = *second;
-	*second = buck;
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
-
-
 /**
- * part - partition for sorting
- * @array: array
- * @last: tail index
- * @first: head index
- * @size: array size
+ * partition - creates partition for quicksort
+ * @array: array to sort
+ * @low: low index
+ * @high: high index
+ * @size: size of array
  * Return: partition index
  */
-
-
-
-int part(int array[], int last, int first, size_t size)
+int partition(int array[], int low, int high, size_t size)
 {
-	int a, b, check = 0;
+	int i, j, check = 0;
 
-	a = last - 1;
+	i = low - 1;
 
-	for (b = last; b <= first - 1; b++)
+	for (j = low; j <= high - 1; j++)
 	{
-		if (array[b] < array[first])
+		if (array[j] < array[high])
 		{
 			check = 1;
-			a++;
-			array_swap(&array[b], &array[a]);
+			i++;
+			swap(&array[j], &array[i]);
 		}
 	}
 	if (check == 1)
-	{
 		print_array(array, size);
-	}
-	array_swap(&array[a + 1], &array[first]);
+	swap(&array[i + 1], &array[high]);
 
 	if (check == 0)
-	{
 		print_array(array, size);
-	}
-	return (a + 1);
+
+	return (i + 1);
 }
-
-
 /**
- * sorthandle - quick sort reccursif
- * @array: array
- * @last: tail index
- * @first: head index
- * @size: size
+ * quicksort - start quicksort algorithm
+ * @array: array to sort
+ * @low: low index
+ * @high: high index
+ * @size: size of array
  */
-
-
-
-void sorthandle(int *array, int last, int first, size_t size)
+void quicksort(int *array, int low, int high, size_t size)
 {
-	int tmp;
+	int p;
 
-	if (last < first)
+	if (low < high)
 	{
-		tmp = part(array, last, first, size);
-		sorthandle(array, last, tmp - 1, size);
-		sorthandle(array, tmp + 1, first, size);
+		p = partition(array, low, high, size);
+		quicksort(array, low, p - 1, size);
+		quicksort(array, p + 1, high, size);
 	}
 }
-
-
 /**
- * quick_sort - calls sorthandle
- * @array: array
- * @size: Array size
+ * quick_sort - calls quicksort algorithm
+ * @array: array to sort
+ * @size: size of array
  */
 void quick_sort(int *array, size_t size)
 {
-	sorthandle(array, 0, size - 1, size);
+	quicksort(array, 0, size - 1, size);
 	print_array(array, size);
 }
